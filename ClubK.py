@@ -6,9 +6,11 @@
 import os
 import time
 import json
-import config
+import argparse
 from flask import *
 from flask_cors import CORS
+
+from config import *
 
 
 def save_data(data):
@@ -39,5 +41,13 @@ def get_cookie():
 def index():
     return render_template('index.html')
 
+
+arg = argparse.ArgumentParser()
+arg.add_argument('-ssl', action="store_true", help="配置ssl，可选项")
+arg = arg.parse_args()
+
+if arg.ssl:
+    ssl = (pem, key)
+    app.run("0.0.0.0", port=5000, ssl_context=ssl)
 
 app.run("0.0.0.0", port=5000)
