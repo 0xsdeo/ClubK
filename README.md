@@ -12,7 +12,7 @@ ClubK是基于python编写的简易xss测试平台，本项目仅供学习交流
 
 3. 默认端口为5000，可根据需要自行更改。
 
-4. 如有配置ssl需求，需将ssl证书下载至ssl文件夹中，然后在config填充pem和key文件地址，例如：`r'ssl/xxx.online_bundle.pem'`、`r'ssl/xxx.online.key'`
+4. 如有配置ssl需求，需在根目录创建ssl文件夹，然后将ssl证书下载至此，接着在config填充pem和key文件地址，例如：`r'ssl/xxx.online_bundle.pem'`、`r'ssl/xxx.online.key'`。
 ## 使用
 
 直接运行ClubK即可，接受到的cookie会下载到cookies目录下，文件名即为目标地址。
