@@ -9,6 +9,9 @@ HOST = "http://127.0.0.1:5000"
 pem = r'ssl/'
 key = r'ssl/'
 
+dingtalk_bot_Webhook = ""
+dingtalk_bot_secret = ""
+
 js = """(function () {
     let a = {
         cookie: document.cookie,
