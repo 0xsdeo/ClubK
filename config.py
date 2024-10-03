@@ -9,8 +9,6 @@ HOST = "http://127.0.0.1:5000"
 pem = r'ssl/'
 key = r'ssl/'
 
-default_js = "request.js"
-
 waiting_time = 3  # 单位为秒
 
 dingtalk_bot_Webhook = ""
@@ -31,22 +29,6 @@ def generate_js(choice=False):
     else:
         with open("static/request.js", "w", encoding="utf-8") as _:
             _.write(get_cookie_js)
-
-
-def generate_html(js=default_js):
-    html = """<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-    <script src="{{url_for('static',filename='""" + js + """')}}"></script>
-</head>
-<body>
-
-</body>
-</html>"""
-    with open("templates/index.html", "w", encoding="utf-8") as f:
-        f.write(html)
 
 # js = """(function () {
 #     let a = {

@@ -43,7 +43,7 @@ ClubK是基于python3编写的简易xss测试平台，本工具将持续维护�
 
 ### 自定义JS配置
 
-如果有配置自制的JS需求，需将该JS放入**static**目录下即可，然后运行ClubK时使用--js指定文件名即可。
+如果有配置自制的JS需求，需将该JS放入**static**目录下即可，然后运行ClubK时指定--js即可。
 
 ## 使用
 
@@ -70,7 +70,7 @@ python ClubK.py --screen
 >自定义JS
 
 ```shell
-python ClubK.py --js JS文件名
+python ClubK.py --js
 ```
 
 ## 效果

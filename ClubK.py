@@ -13,7 +13,7 @@ from flask import *
 from flask_cors import CORS
 from PIL import Image, UnidentifiedImageError
 
-from config import pem, key, generate_js, generate_html
+from config import pem, key, generate_js
 from dingtalk_bot import bot
 
 
@@ -113,9 +113,9 @@ async def get_cookie():
     return "success"
 
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+# @app.route('/')
+# def index():
+#     return render_template('index.html')
 
 
 if __name__ == "__main__":
@@ -129,7 +129,7 @@ if __name__ == "__main__":
     arg = argparse.ArgumentParser()
     arg.add_argument('-s', '--ssl', action="store_true", help="启用https，可选项")
     arg.add_argument('-d', '--ding', action="store_true", help="启用钉钉机器人，可选项")
-    arg.add_argument('--js', default=False, help="自定义JS，指定JS文件名即可，可选项")
+    arg.add_argument('--js', action="store_true", help="配置自定义JS，可选项")
     arg.add_argument('--screen', action="store_true", help="启用页面截图，可选项")
     arg = arg.parse_args()
 
@@ -137,11 +137,10 @@ if __name__ == "__main__":
     screen = arg.screen
     js = arg.js
 
-    generate_js(screen) if screen else generate_js()
-    generate_html(js) if js else generate_html()
-
     if arg.screen and arg.js:
-        raise ValueError("不支持自定义JS进行截图")
+        raise ValueError("不支持自定义JS进行页面截图")
+
+    generate_js(screen) if screen else generate_js()
 
     if arg.ssl:
         ssl = (pem, key)
