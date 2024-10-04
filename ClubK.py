@@ -138,7 +138,7 @@ if __name__ == "__main__":
     js = arg.js
 
     if arg.screen and arg.js:
-        raise ValueError("不支持自定义JS进行页面截图")
+        raise ValueError("不支持自定义JS再指定--screen进行页面截图")
 
     generate_js(screen) if screen else generate_js()
 
