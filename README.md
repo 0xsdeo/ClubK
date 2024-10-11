@@ -35,7 +35,7 @@ ClubK是基于python3编写的简易xss测试平台，本工具将持续维护�
 
 3. 默认端口为5000，可根据需要自行更改。
 
-4. 如有配置ssl需求，需在根目录创建ssl文件夹，然后将ssl证书下载至此，接着在config填充pem和key文件地址，例如：`r'ssl/xxx.online_bundle.pem'`、`r'ssl/xxx.online.key'`。
+4. 如有配置ssl需求，需在根目录创建ssl文件夹，然后将ssl证书下载至此，接着在config填充crt和key文件地址，例如：`r'ssl/xxx.online_bundle.crt'`、`r'ssl/xxx.online.key'`。
 
 5. 如有配置钉钉机器人需求，请先查阅钉钉官方文档查看如何创建机器人：`https://open.dingtalk.com/document/orgapp/custom-robot-access`，需要注意的是创建机器人时安全设置需要设置为**加签**模式，然后将机器人的Webhook和secret填充到config即可。
 
@@ -43,16 +43,16 @@ ClubK是基于python3编写的简易xss测试平台，本工具将持续维护�
 
 ### 自定义JS配置
 
-如果有配置自制的JS需求，需将该JS放入**static**目录下即可，然后运行ClubK时指定--js即可。
+如果有配置自制的JS需求，需将该JS放入**static**目录下即可，然后运行ClubK时指定-js即可。
 
 ## 使用
 
-直接运行ClubK即可，接受到的cookie会下载到cookies目录下，文件名即为目标地址。
+直接运行ClubK即可，默认会在static目录下生成**request.js**，即为攻击脚本。接受到的cookie会下载到cookies目录下，文件名即为目标地址。
 
 >配置ssl后启用https
 
 ```shell
-python ClubK.py -s 或 python ClubK.py --ssl
+python ClubK.py -ssl
 ```
 
 >启用钉钉机器人
@@ -70,7 +70,13 @@ python ClubK.py --screen
 >自定义JS
 
 ```shell
-python ClubK.py --js
+python ClubK.py -js
+```
+
+>启用接受到数据后立即关闭服务端
+
+```shell
+python ClubK.py --clear
 ```
 
 ## 效果
@@ -106,6 +112,8 @@ freebuf:
 4. 截图若返回非正常内容，可能是由于该请求并未渲染在页面上而导致的截图失败。
 
 5. 若启用了钉钉机器人，消息大小尽量不要超过20000bytes，否则会发送失败。
+
+6. 增加接受到数据后立即关闭服务端功能主要是为了防止脚本一直生效，其初衷是担心有些朋友可能会插入钓鱼脚本，脚本一直生效的话可能会让受害者做出一些措施导致权限很快失效。
 
 ## Contact
 

