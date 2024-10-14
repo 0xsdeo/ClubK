@@ -28,6 +28,10 @@ ClubK是基于python3编写的简易xss测试平台，本工具将持续维护�
 5. 可加载自定义JS
 6. 支持接受到数据后立即关闭服务端
 
+## 必看说明
+
+ClubK默认会提供一个获取cookie的脚本，具体位于static目录下的request.js，如果想用自己的脚本请看下面的配置说明。
+
 ## 配置
 
 1. clone到本地后使用`pip install -r requirements.txt`安装所需的库。
