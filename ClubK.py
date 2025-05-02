@@ -140,7 +140,7 @@ async def page_not_found(e):
     request_ip = request.remote_addr
     host = dict(request.headers)['Origin']
     await custom_js(request.get_data().decode(), request_ip, str(request.headers), host, request_url)
-    return "success"
+    return "Page not found", 404
 
 
 if __name__ == "__main__":
